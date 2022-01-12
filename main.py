@@ -20,12 +20,12 @@ def notify_storage_class_change(event, context):
     """
     print(f'Event ID: {context.event_id}')
     print(f'Event type: {context.event_type}')
-    print(f'Bucket: {event["bucket"]}')
-    print(f'File: {event["name"]}')
-    print(f'Metageneration: {event["metageneration"]}')
-    print(f'Created: {event["timeCreated"]}')
-    print(f'Updated: {event["updated"]}')
-    print(f'Storage class update time: {event["timeStorageClassUpdated"]}')
+    print(f'Bucket: {event.get("bucket")}')
+    print(f'File: {event.get("name")}')
+    print(f'Metageneration: {event.get("metageneration")}')
+    print(f'Created: {event.get("timeCreated")}')
+    print(f'Updated: {event.get("updated")}')
+    print(f'Storage class update time: {event.get("timeStorageClassUpdated")}')
 
     current_storage_class = event['storageClass']
     print('Storage class: {}'.format(current_storage_class))
