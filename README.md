@@ -2,7 +2,7 @@
 
 Google Cloud Function that publishes messages to Pub/Sub when a GCS object's
 metadata is changed and the storage class meets a given criterion 
-(e.g., == ARCHIVE).
+(e.g., == `ARCHIVE`).
 
 ## How to contribute
 
@@ -21,5 +21,5 @@ as well.
 ### Contribute code
 
 Please make sure to read the [Contributing
-Guide](https://github.com/ricardolsmendes/gcp-storage-class-change-notifier/blob/main/.github/.github/CONTRIBUTING.md)
+Guide](https://github.com/ricardolsmendes/gcp-storage-class-change-notifier/blob/main/.github/CONTRIBUTING.md)
 before making a pull request.
