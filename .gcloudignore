@@ -14,7 +14,8 @@
 .git
 .gitignore
 
-# Unnecessary project files:
+# Project files not required for deployment:
+.github
 README.md
 LICENSE
 

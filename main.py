@@ -1,6 +1,13 @@
+import json
+
+from google.cloud import pubsub_v1
+
+
 def notify_storage_class_change(event, context):
-    """Background Cloud Function to be triggered by Cloud Storage.
-       This generic function logs relevant data when a file is changed.
+    """Background Cloud Function to be triggered by Cloud Storage when an
+       object's metadata is changed.
+       This function publishes a message to Pub/Sub when the object's storage
+       class is ARCHIVE.
     Args:
         event (dict):  The dictionary with data specific to this type of event.
                        The `data` field contains a description of the event in
@@ -10,12 +17,35 @@ def notify_storage_class_change(event, context):
     Returns:
         None; the output is written to Stackdriver Logging
     """
+    print(f'Event ID: {context.event_id}')
+    print(f'Event type: {context.event_type}')
+    print(f'Bucket: {event["bucket"]}')
+    print(f'File: {event["name"]}')
+    print(f'Metageneration: {event["metageneration"]}')
+    print(f'Created: {event["timeCreated"]}')
+    print(f'Updated: {event["updated"]}')
+    print(f'Storage class update time: {event["timeStorageClassUpdated"]}')
 
-    print('Event ID: {}'.format(context.event_id))
-    print('Event type: {}'.format(context.event_type))
-    print('Bucket: {}'.format(event['bucket']))
-    print('File: {}'.format(event['name']))
-    print('Metageneration: {}'.format(event['metageneration']))
-    print('Created: {}'.format(event['timeCreated']))
-    print('Updated: {}'.format(event['updated']))
-    print('Storage class: {}'.format(event['storageClass']))
+    current_storage_class = event['storageClass']
+    print('Storage class: {}'.format(current_storage_class))
+
+    archive_storage_class = 'ARCHIVE'
+    if current_storage_class != archive_storage_class:
+        print('Skipping downstream notification...')
+        return
+
+    publisher = pubsub_v1.PublisherClient()
+
+    project_id = 'your-project-id'
+    topic_id = 'your-topic-id'
+    topic_path = publisher.topic_path(project_id, topic_id)
+
+    data = json.dumps(event)
+    # Data must be a bytestring
+    data = data.encode("utf-8")
+
+    # When you publish a message, the client returns a future.
+    future = publisher.publish(topic_path, data)
+    print(future.result())
+
+    print(f'Message published to {topic_path}.')
