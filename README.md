@@ -1,12 +1,29 @@
 # gcp-storage-class-change-notifier
 
 Google Cloud Function that publishes messages to Pub/Sub when a GCS object's
-metadata is changed and the storage class meets a given criterion 
-(e.g., == `ARCHIVE`).
+metadata is changed and the storage class meets a given criterion — 
+e.g., == `ARCHIVE`.
 
 [![license](https://img.shields.io/github/license/ricardolsmendes/gcp-storage-class-change-notifier.svg)](https://github.com/ricardolsmendes/gcp-storage-class-change-notifier/blob/main/LICENSE)
 [![issues](https://img.shields.io/github/issues/ricardolsmendes/gcp-storage-class-change-notifier.svg)](https://github.com/ricardolsmendes/gcp-storage-class-change-notifier/issues)
 [![continuous integration](https://github.com/ricardolsmendes/gcp-storage-class-change-notifier/actions/workflows/continuous-integration.yaml/badge.svg)](https://github.com/ricardolsmendes/gcp-storage-class-change-notifier/actions/workflows/continuous-integration.yaml)
+
+## Deployment instructions
+
+```sh
+export PUBSUB_PROJECT_ID=<YOUR-PROJECT-ID>
+export PUBSUB_TOPIC_ID=<YOUR-PUBSUB-TOPIC-ID>
+export STORAGE_CLASS_CHANGE_NOTIF_SA=<PUBSUB-PUBLISHER-SERVICE-ACCOUNT-EMAIL>
+export TRIGGER_BUCKET=<YOUR-BUCKET-NAME>
+
+gcloud functions deploy notify-storage-class-change \
+  --entry-point notify_storage_class_change \
+  --runtime python39 \
+  --service-account $STORAGE_CLASS_CHANGE_NOTIF_SA \
+  --set-env-vars PUBSUB_PROJECT_ID=$PUBSUB_PROJECT_ID,PUBSUB_TOPIC_ID=$PUBSUB_TOPIC_ID \
+  --trigger-event google.storage.object.metadataUpdate \
+  --trigger-resource $TRIGGER_BUCKET
+```
 
 ## How to contribute
 

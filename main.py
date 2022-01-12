@@ -36,8 +36,8 @@ def notify_storage_class_change(event, context):
         return
 
     publisher = pubsub_v1.PublisherClient()
-    topic_path = publisher.topic_path(os.getenv('PUB_SUB_PROJECT_ID'),
-                                      os.getenv('PUB_SUB_TOPIC_ID'))
+    topic_path = publisher.topic_path(os.getenv('PUBSUB_PROJECT_ID'),
+                                      os.getenv('PUBSUB_TOPIC_ID'))
 
     # Data must be a bytestring.
     data = json.dumps(event)
