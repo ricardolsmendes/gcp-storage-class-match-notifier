@@ -5,8 +5,8 @@ from google.cloud import pubsub_v1
 
 
 def notify_storage_class_change(event, context):
-    """Background Cloud Function to be triggered by Cloud Storage when an
-       object's metadata is changed.
+    """Background Cloud Function to be triggered by Cloud Storage when the
+       metadata of a GCS object changes.
        This function publishes a message to Pub/Sub when the object's storage
        class is ARCHIVE.
     Args:
