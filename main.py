@@ -1,4 +1,5 @@
 import json
+import os
 
 from google.cloud import pubsub_v1
 
@@ -31,17 +32,15 @@ def notify_storage_class_change(event, context):
 
     archive_storage_class = 'ARCHIVE'
     if current_storage_class != archive_storage_class:
-        print('Skipping downstream notification...')
+        print('Skipping Pub/Sub notification...')
         return
 
     publisher = pubsub_v1.PublisherClient()
-
-    project_id = 'your-project-id'
-    topic_id = 'your-topic-id'
-    topic_path = publisher.topic_path(project_id, topic_id)
+    topic_path = publisher.topic_path(os.getenv('PUB_SUB_PROJECT_ID'),
+                                      os.getenv('PUB_SUB_TOPIC_ID'))
 
     data = json.dumps(event)
-    # Data must be a bytestring
+    # Data must be a bytestring.
     data = data.encode("utf-8")
 
     # When you publish a message, the client returns a future.
