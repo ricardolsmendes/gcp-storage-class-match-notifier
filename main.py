@@ -39,12 +39,14 @@ def notify_storage_class_change(event, context):
     topic_path = publisher.topic_path(os.getenv('PUB_SUB_PROJECT_ID'),
                                       os.getenv('PUB_SUB_TOPIC_ID'))
 
-    data = json.dumps(event)
     # Data must be a bytestring.
+    data = json.dumps(event)
     data = data.encode("utf-8")
 
     # When you publish a message, the client returns a future.
+    # The .result() method will block until the future is complete.
+    # If there is an error, it will raise an exception.
     future = publisher.publish(topic_path, data)
-    print(future.result())
+    message_id = future.result()
 
-    print(f'Message published to {topic_path}.')
+    print(f'Message {message_id} published to {topic_path}.')
