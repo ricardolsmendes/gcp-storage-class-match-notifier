@@ -4,6 +4,10 @@ Google Cloud Function that publishes messages to Pub/Sub when a GCS object's
 metadata is changed and the storage class meets a given criterion 
 (e.g., == `ARCHIVE`).
 
+[![license](https://img.shields.io/github/license/ricardolsmendes/gcp-storage-class-change-notifier.svg)](https://github.com/ricardolsmendes/gcp-storage-class-change-notifier/blob/main/LICENSE)
+[![issues](https://img.shields.io/github/issues/ricardolsmendes/gcp-storage-class-change-notifier.svg)](https://github.com/ricardolsmendes/gcp-storage-class-change-notifier/issues)
+[![continuous integration](https://github.com/ricardolsmendes/gcp-storage-class-change-notifier/actions/workflows/continuous-integration.yaml/badge.svg)](https://github.com/ricardolsmendes/gcp-storage-class-change-notifier/actions/workflows/continuous-integration.yaml)
+
 ## How to contribute
 
 Please make sure to take a moment and read the [Code of
