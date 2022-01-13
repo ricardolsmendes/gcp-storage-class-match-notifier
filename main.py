@@ -4,30 +4,30 @@ import os
 from google.cloud import pubsub_v1
 
 
-def notify_storage_class_change(event, context):
-    """Background Cloud Function to be triggered by Cloud Storage when the
-       metadata of a GCS object changes.
+def notify_storage_class_match(storage_object, context):
+    """Background Cloud Function to be triggered by Cloud Storage.
        This function publishes a message to Pub/Sub when the object's storage
-       class is ARCHIVE.
+       class is ARCHIVE. The message body is fulfilled with the
+       `storage_object` dictionary content.
     Args:
-        event (dict):  The dictionary with data specific to this type of event.
-                       The `data` field contains a description of the event in
-                       the Cloud Storage `object` format described here:
-                       https://cloud.google.com/storage/docs/json_api/v1/objects#resource
+        storage_object (dict): Contains a description of the object in the
+                               Cloud Storage `object` format described here:
+                               https://cloud.google.com/storage/docs/json_api/v1/objects#resource
         context (google.cloud.functions.Context): Metadata of triggering event.
     Returns:
-        None; the output is written to Stackdriver Logging
+        None; the output is written to Stackdriver Logging.
     """
     print(f'Event ID: {context.event_id}')
     print(f'Event type: {context.event_type}')
-    print(f'Bucket: {event.get("bucket")}')
-    print(f'File: {event.get("name")}')
-    print(f'Metageneration: {event.get("metageneration")}')
-    print(f'Created: {event.get("timeCreated")}')
-    print(f'Updated: {event.get("updated")}')
-    print(f'Storage class update time: {event.get("timeStorageClassUpdated")}')
+    print(f'Bucket: {storage_object.get("bucket")}')
+    print(f'File: {storage_object.get("name")}')
+    print(f'Metageneration: {storage_object.get("metageneration")}')
+    print(f'Created: {storage_object.get("timeCreated")}')
+    print(f'Updated: {storage_object.get("updated")}')
+    print(f'Storage class update time:'
+          f' {storage_object.get("timeStorageClassUpdated")}')
 
-    current_storage_class = event['storageClass']
+    current_storage_class = storage_object.get('storageClass')
     print('Storage class: {}'.format(current_storage_class))
 
     archive_storage_class = 'ARCHIVE'
@@ -40,7 +40,7 @@ def notify_storage_class_change(event, context):
                                       os.getenv('PUBSUB_TOPIC_ID'))
 
     # Data must be a bytestring.
-    data = json.dumps(event)
+    data = json.dumps(storage_object)
     data = data.encode("utf-8")
 
     # When you publish a message, the client returns a future.
