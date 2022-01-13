@@ -10,11 +10,14 @@
 
 # If you would like to upload your .git directory, .gitignore file or files
 # from your .gitignore file, remove the corresponding line below:
-.git
+.git/
 .gitignore
 #!include:.gitignore
 
 # Project files not required for deployment:
-.github
-README.md
+.github/
+tests/
+.coveragerc
 LICENSE
+pytest.ini
+README.md

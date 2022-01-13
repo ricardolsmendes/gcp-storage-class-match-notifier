@@ -26,10 +26,13 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install --upgrade flake8 yapf
+          pip install --upgrade flake8 pytest-cov yapf
       - name: Run YAPF style check on source and test code
         run: |
-          yapf --diff --recursive ./main.py
+          yapf --diff --recursive ./*.py ./tests
       - name: Run Flake8 linter on source and test code
         run: |
-          flake8 ./main.py
+          flake8 ./*.py ./tests
+      - name: Run the unit tests
+        run: |
+          pytest
