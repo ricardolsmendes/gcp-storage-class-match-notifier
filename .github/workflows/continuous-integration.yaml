@@ -15,24 +15,28 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.9]
+        python-version: [3.6, 3.7, 3.8, 3.9]
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install dependencies
+      - name: Set up the execution environment
         run: |
           python -m pip install --upgrade pip
-          pip install --upgrade flake8 pytest-cov yapf
       - name: Run YAPF style check on source and test code
         run: |
+          pip install yapf
           yapf --diff --recursive ./*.py ./tests
       - name: Run Flake8 linter on source and test code
         run: |
+          pip install flake8
           flake8 ./*.py ./tests
       - name: Run the unit tests
         run: |
+          pip install pytest-cov
+          pip install --upgrade -r requirements.txt
           pytest
