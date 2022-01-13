@@ -7,7 +7,7 @@ from google.cloud import pubsub_v1
 def notify_storage_class_match(storage_object, context):
     """Background Cloud Function to be triggered by Cloud Storage.
        This function publishes a message to Pub/Sub when the object's storage
-       class is ARCHIVE. The message body is fulfilled with the
+       class is set to ARCHIVE. The message body is fulfilled with the
        `storage_object` dictionary content.
     Args:
         storage_object (dict): Contains a description of the object in the

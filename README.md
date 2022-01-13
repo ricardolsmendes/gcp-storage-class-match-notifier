@@ -1,7 +1,7 @@
 # gcp-storage-class-match-notifier
 
 Google Cloud Function that publishes messages to Pub/Sub when the metadata of a
-GCS object changes and the object's storage class matches the given criteria — 
+GCS object changes and the object's storage class matches given criteria — 
 e.g., == `ARCHIVE`.
 
 It has been used to notify other systems when GCS objects storage class changes
@@ -16,10 +16,10 @@ class matches the criteria.
 ## Deployment instructions
 
 ```sh
-export PUBSUB_PROJECT_ID=<YOUR-PROJECT-ID>
-export PUBSUB_TOPIC_ID=<YOUR-PUBSUB-TOPIC-ID>
-export STORAGE_CLASS_MATCH_NOTIF_SA=<PUBSUB-PUBLISHER-SERVICE-ACCOUNT-EMAIL>
-export TRIGGER_BUCKET=<YOUR-BUCKET-NAME>
+PUBSUB_PROJECT_ID=<YOUR-PROJECT-ID>
+PUBSUB_TOPIC_ID=<YOUR-PUBSUB-TOPIC-ID>
+STORAGE_CLASS_MATCH_NOTIF_SA=<PUBSUB-PUBLISHER-SERVICE-ACCOUNT-EMAIL>
+TRIGGER_BUCKET=<YOUR-BUCKET-NAME>
 
 gcloud functions deploy notify-storage-class-match \
   --entry-point notify_storage_class_match \
@@ -29,6 +29,11 @@ gcloud functions deploy notify-storage-class-match \
   --trigger-event google.storage.object.metadataUpdate \
   --trigger-resource $TRIGGER_BUCKET
 ```
+
+The `STORAGE_CLASS_MATCH_NOTIF_SA` environment variable refers to the email of
+the IAM service account associated with the function at runtime. The service
+account must be granted the `pubsub.publisher` role on the Pub/Sub Topic
+identified by `projects/${PUBSUB_PROJECT_ID}/topics/${PUBSUB_TOPIC_ID}`.
 
 ## How to contribute
 
